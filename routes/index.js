@@ -1,5 +1,10 @@
 const express = require('express');
 const router = express.Router();
+const passport = require('passport')
+const faker = require('faker')
+const { validationResult } = require('express-validator');
+
+const User = require('./users/models/User')
 
 /* GET home page. */
 router.get('/', (req, res, next) => {
@@ -8,7 +13,7 @@ router.get('/', (req, res, next) => {
 
 //! Register Routes
 router.get('/register', (req, res) => {
-    res.render('auth/register');
+    res.render('auth/register', { errors: req.flash('errors') });
 })
 
 router.post('/register', (req, res, next) => {
@@ -24,8 +29,8 @@ router.post('/register', (req, res, next) => {
             } else {
                 const newUser = new User();
 
-                newUser.profile.name = req.body.name;
-                newUser.profile.picture = faker.image.avatar();
+                newUser.name = req.body.name;
+                newUser.picture = faker.image.avatar();
                 newUser.email = req.body.email;
                 newUser.password = req.body.password;
 
@@ -39,8 +44,8 @@ router.post('/register', (req, res, next) => {
                                     message: err
                                 });
                             } else {
-                                // return res.redirect('/');
-                                next();
+                                return res.redirect('/');
+                                // next();
                             }
                         });
                     })
@@ -55,8 +60,15 @@ router.post('/register', (req, res, next) => {
 
 //! Login Routes
 router.get('/login', (req, res) => {
-    res.render('auth/login');
+    res.render('auth/login', { errors: req.flash('errors') });
 })
+
+router.post('/login', passport.authenticate('local-login', {
+        successRedirect: '/',
+        failureRedirect: '/api/users/login',
+        failureFlash: true
+    })
+);
 
 router.get('/about', (req, res) => {
     res.render('main/about')

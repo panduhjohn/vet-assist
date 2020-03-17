@@ -5,6 +5,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const passport = require('passport')
+const flash = require('connect-flash');
 const mongoose = require('mongoose');
 const session = require('express-session');
 let mongoStore = require('connect-mongo')(session);
@@ -39,6 +40,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(flash()); //need this to display flash messages
+
 //Session Middleware
 app.use(
     session({
@@ -58,7 +61,8 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/api/users', usersRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
