@@ -4,11 +4,13 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const passport = require('passport')
 const mongoose = require('mongoose');
 const session = require('express-session');
 let mongoStore = require('connect-mongo')(session);
 
 require('dotenv').config();
+require('./lib/passport')
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -50,6 +52,10 @@ app.use(
         })
     })
 );
+
+// middleware for passport and session. make sure its under session middleware
+app.use(passport.initialize())
+app.use(passport.session())
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
