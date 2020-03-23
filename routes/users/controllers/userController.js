@@ -1,14 +1,17 @@
-const { validationResult } = require('express-validator')
-const faker = require('faker')
-const passport = require('passport')
+const { validationResult } = require('express-validator');
+const faker = require('faker');
+const passport = require('passport');
+const bcrypt = require('bcryptjs');
 
-const User = require('../models/User')
+const User = require('../models/User');
 
-require('../../../lib/passport')
-require('dotenv').config()
+require('../../../lib/passport');
+require('dotenv').config();
 
 module.exports = {
-    
+    renderIndex: (req, res, next) => {
+        return res.render('index');
+    },
 
     renderRegister: (req, res) => {
         return res.render('auth/register', { errors: req.flash('errors') });
@@ -42,7 +45,7 @@ module.exports = {
                                         message: err
                                     });
                                 } else {
-                                    return res.redirect('/users/homepage');
+                                    return res.redirect('/main/homepage');
                                     // next();
                                 }
                             });
@@ -55,5 +58,27 @@ module.exports = {
             .catch(err => console.log(err));
     },
 
+    renderLogin: (req, res) => {
+        return res.render('auth/login', { errors: req.flash('errors') });
+    },
 
+    login: passport.authenticate('local-login', {
+        successRedirect: '/api/users/profile',
+        failureRedirect: '/api/users/login',
+        failureFlash: true
+    }),
+
+    renderHomepage: (req, res) => {
+        if (req.isAuthenticated()) {
+            return res.render('main/homepage');
+        }
+        return res.redirect('/users/login');
+    },
+
+    renderProfile: (req, res) => {
+        if (req.isAuthenticated()) {
+            return res.render('auth/profile')
+        }
+        return res.redirect('/users/login');
+    }
 };

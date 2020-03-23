@@ -24,17 +24,17 @@
             <li class="nav-item">
                 <a class="nav-link" href="/about">About</a>
             </li>
-            <%/* if(!user) { */%>
+            <% if(!user) { %>
             <li class="nav-item">
-                <a class="nav-link" href="/users/register">Register</a>
+                <a class="nav-link" href="/api/users/register">Register</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/login">Login</a>
             </li>
-        <!-- <% /*} else { */ %>
+        <% } else {  %>
             <span style='color: #ee802e' class='myNavGreeting'>Hello &nbsp;
             <a href="/api/users/profile" style='color: #ee802e'>
-                <span style='color: red'><%= /* user.name.toUpperCase() */ %></span>
+                <span style='color: red'><%=  user.name.toUpperCase()  %></span>
             </a> 
             <span style="margin: 0 10px; background-color:green; border-radius:10px;">
                 <a style="text-decoration:none;height:20px; width: 20px; " href="/api/cart">
@@ -46,7 +46,7 @@
             
       
         </span>
-    <%/* } */%> -->
+    <% } %>
         </ul>
     </div>
 </nav>
