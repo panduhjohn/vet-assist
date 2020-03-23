@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Veteran's Assistance</title>
+        <% include ../partials/head %>
+    </head>
+    <body>
+        <% include ../partials/nav %>
+
+        <div class="ambu-background" style="height: 100%; width: 100%; color: black;">
+            <h1>You should only see me once you're logged in.</h1>
+        </div>
+        
+        <% if (user) { %>
+         <h1>hello <%= user.name %>    </h1>
+        <% } %>
+        <% if (!user) { %>
+         <h1>hello NO USER LOGGED IN   </h1>
+        <% } %>
+
+
+
+
+
+
+       
+        <% include ../partials/footer %>
+        <% include ../partials/scripts %>
+    </body>
+</html>

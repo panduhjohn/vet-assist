@@ -9,8 +9,7 @@ const UserSchema = new Schema({
     picture: { type: String, default: '', trim: true },
     address: { type: String, default: '(Please update address)', trim: true },
     city: { type: String, default: '(Please update city)', trim: true },
-    state: { type: String, default: '(Please update state)', trim: true },
-    
+    state: { type: String, default: '(Please update state)', trim: true }, 
 })
 
 UserSchema.pre('save', function(next) {
