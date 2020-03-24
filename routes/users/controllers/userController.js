@@ -45,7 +45,7 @@ module.exports = {
                                         message: err
                                     });
                                 } else {
-                                    return res.redirect('/main/homepage');
+                                    return res.redirect('/api/users/profile');
                                     // next();
                                 }
                             });
@@ -77,8 +77,79 @@ module.exports = {
 
     renderProfile: (req, res) => {
         if (req.isAuthenticated()) {
-            return res.render('auth/profile')
+            return res.render('auth/profile');
         }
-        return res.redirect('/users/login');
+        return res.redirect('/api/users/login');
+    },
+
+    updateProfile: (params, id) => {
+        // const {name, email, address} = params //if you want to destructure remove params from the code after the clg(hello)
+        return new Promise((resolve, reject) => {
+            User.findById(id)
+                .then(user => {
+                    console.log('hello');
+                    if (params.name) user.name = params.name;
+                    if (params.email) user.email = params.email;
+                    if (params.address) user.address = params.address;
+                    if (params.city) user.city = params.city;
+                    if (params.state) user.state = params.state;
+                    if (params.credentials) user.credentials = params.credentials;
+                    return user;
+                })
+                .then(user => {
+                    user.save().then(user => {
+                        resolve(user);
+                    });
+                })
+                .catch(err => reject(err));
+        }).catch(err => reject(err));
+    },
+
+    updatePassword: (params, id) => {
+        return new Promise((resolve, reject) => {
+            User.findById(id).then(user => {
+                if (
+                    !params.oldPassword ||
+                    !params.newPassword ||
+                    !params.repeatNewPassword
+                ) {
+                    reject('All password inputs must be filled');
+                } else if (params.newPassword !== params.repeatNewPassword) {
+                    reject('New passwords do not match');
+                } else {
+                    bcrypt
+                        .compare(params.oldPassword, user.password)
+                        .then(result => {
+                            if (result === false) {
+                                reject('Old password incorrect');
+                            } else {
+                                console.log('Did it save?');
+                                user.password = params.newPassword;
+                                user.save()
+                                    .then(user => {
+                                        resolve(user);
+                                    })
+                                    .catch(err => {
+                                        console.log(err);
+                                        throw new Error(
+                                            'Error in passwords',
+                                            err
+                                        );
+                                    });
+                            }
+                        })
+                        .catch(err => {
+                            console.log(err);
+                            throw new Error('Error in passwords', err);
+                        });
+                }
+            });
+        });
     }
+    // updateProfile: (req, res) => {
+    //     if (req.isAuthenticated()) {
+    //         return res.render('auth/updateProfile');
+    //     }
+    //     return res.redirect('/api/users/login');
+    // },
 };

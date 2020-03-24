@@ -4,6 +4,9 @@ const passport = require('passport')
 
 const userValidation = require('../users/utils/userValidation')
 const userController = require('./controllers/userController')
+const {updatePassword, updateProfile} = require('../users/controllers/userController')
+
+const User = require('./models/User')
 
 require('../../lib/passport')
 
@@ -19,6 +22,37 @@ router.get('/homepage', userController.renderHomepage)
 
 router.get('/profile', userController.renderProfile)
 
+// router.get('/update-profile', userController.updateProfile)
+
+router.get('/update-profile', (req, res) => {
+    if (req.isAuthenticated()) {
+        return res.render('auth/updateProfile');
+    }
+    return res.redirect('/api/users/login');
+});
+
+router.put('/update-profile', (req, res, next) => {
+    userController.updateProfile(req.body, req.user._id)
+        .then(user => {
+            return res.redirect('/api/users/profile');
+        })
+        .catch(err => {
+            console.log(err);
+            return res.redirect('/api/users/update-profile');
+        });
+});
+
+router.put('/update-password', (req, res) => {
+    userController.updatePassword(req.body, req.user._id)
+        .then(user => {
+            console.log('update route');
+            return res.redirect('/api/users/profile');
+        })
+        .catch(err => {
+            console.log('pass route');
+            return res.redirect('/api/users/update-profile');
+        });
+});
 
 
 module.exports = router

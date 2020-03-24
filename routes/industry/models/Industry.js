@@ -1,17 +1,16 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 const bcrypt = require('bcryptjs');
 
-const UserSchema = new Schema({
+const IndustrySchema = new Schema({
     name: { type: String, required: true, trim: true },
-    email: { type: String, unique: true, lowercase: true, required: true, trim: true },
+    email: { type: String, unique: true, lowercase: true, required: true, trim: true},
     password: { type: String, required: true, trim: true },
     picture: { type: String, default: '', trim: true },
     address: { type: String, default: 'Please update address', trim: true },
     city: { type: String, default: 'Please update city', trim: true },
-    state: { type: String, default: 'Please update state', trim: true }, 
-    credentials: { type: String, default: 'Please update credentials', trim: true }, 
-})
+    state: { type: String, default: 'Please update state', trim: true },
+});
 
 UserSchema.pre('save', function(next) {
     const user = this;
@@ -27,4 +26,4 @@ UserSchema.pre('save', function(next) {
     });
 });
 
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model('Industry', IndustrySchema);

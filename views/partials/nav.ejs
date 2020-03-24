@@ -32,17 +32,19 @@
                 <a class="nav-link" href="/login">Login</a>
             </li>
         <% } else {  %>
-            <span style='color: #ee802e' class='myNavGreeting'>Hello &nbsp;
+          
+            
+            <span style='color: #919aa1' class='myNavGreeting'>Logged in as: &nbsp;
             <a href="/api/users/profile" style='color: #ee802e'>
-                <span style='color: red'><%=  user.name.toUpperCase()  %></span>
+                <span style='color: red'><%=  user.name.toUpperCase()%></span>
             </a> 
-            <span style="margin: 0 10px; background-color:green; border-radius:10px;">
-                <a style="text-decoration:none;height:20px; width: 20px; " href="/api/cart">
-                <i style="font-size:1.2em;color:white;padding-left:10px;" class="fa fa-shopping-cart"></i>
-                <span style="font-size:1.2em;color:white;padding-right:10px;"><%= /* cartTotal */%></span>
+            <!-- <span style="margin: 0 10px; background-color:green; border-radius:10px;"> -->
+                <!-- <a style="text-decoration:none;height:20px; width: 20px; " href="/api/cart">
+                <i style="font-size:1.2em;color:white;padding-left:10px;" class="fa fa-shopping-cart"></i> -->
+                <!-- <span style="font-size:1.2em;color:white;padding-right:10px;"><%= /* cartTotal */%></span> -->
             </a>
-            </span>
             <span class='myNavLogout'><a href="/logout">Logout</a></span>
+            </span>
             
       
         </span>

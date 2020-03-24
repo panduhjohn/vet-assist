@@ -81,4 +81,10 @@ router.get('/contact', (req, res) => {
     return res.render('main/contact');
 });
 
+router.get('/logout', (req, res) => {
+    req.logout();
+    req.session.destroy();
+    return res.redirect('/');
+});
+
 module.exports = router;

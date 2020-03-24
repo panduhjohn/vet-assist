@@ -9,12 +9,14 @@ const flash = require('connect-flash');
 const mongoose = require('mongoose');
 const session = require('express-session');
 let mongoStore = require('connect-mongo')(session);
+const methodOverride = require('method-override');
 
 require('dotenv').config();
 require('./lib/passport')
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users/userRoutes');
+const industryRouter = require('./routes/industry/industryRoutes');
 
 const User = require('./routes/users/models/User')
 
@@ -41,6 +43,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(methodOverride('_method'));
 
 app.use(flash()); //need this to display flash messages
 
@@ -72,6 +75,7 @@ app.use((req, res, next) => {
 
 app.use('/', indexRouter);
 app.use('/api/users', usersRouter);
+app.use('/api/industry', industryRouter);
 
 
 // catch 404 and forward to error handler
