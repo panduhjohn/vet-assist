@@ -45,7 +45,7 @@ module.exports = {
                                         message: err
                                     });
                                 } else {
-                                    return res.redirect('/api/users/profile');
+                                    return res.redirect('/api/users/options');
                                     // next();
                                 }
                             });
@@ -63,7 +63,7 @@ module.exports = {
     },
 
     login: passport.authenticate('local-login', {
-        successRedirect: '/api/users/profile',
+        successRedirect: '/api/users/options',
         failureRedirect: '/api/users/login',
         failureFlash: true
     }),
@@ -145,11 +145,11 @@ module.exports = {
                 }
             });
         });
+    },
+
+    renderOptions: (req, res) => {
+        return res.render('auth/options');
     }
-    // updateProfile: (req, res) => {
-    //     if (req.isAuthenticated()) {
-    //         return res.render('auth/updateProfile');
-    //     }
-    //     return res.redirect('/api/users/login');
-    // },
+
+
 };

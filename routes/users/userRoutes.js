@@ -22,6 +22,8 @@ router.get('/homepage', userController.renderHomepage)
 
 router.get('/profile', userController.renderProfile)
 
+router.get('/options', userController.renderOptions)
+
 // router.get('/update-profile', userController.updateProfile)
 
 router.get('/update-profile', (req, res) => {
@@ -34,7 +36,7 @@ router.get('/update-profile', (req, res) => {
 router.put('/update-profile', (req, res, next) => {
     userController.updateProfile(req.body, req.user._id)
         .then(user => {
-            return res.redirect('/api/users/profile');
+            return res.redirect('/api/users/options');
         })
         .catch(err => {
             console.log(err);
@@ -46,7 +48,7 @@ router.put('/update-password', (req, res) => {
     userController.updatePassword(req.body, req.user._id)
         .then(user => {
             console.log('update route');
-            return res.redirect('/api/users/profile');
+            return res.redirect('/api/users/options');
         })
         .catch(err => {
             console.log('pass route');
