@@ -148,6 +148,10 @@ module.exports = {
 
     renderOptions: (req, res) => {
         return res.render('auth/options', {volunteers});
+    },
+
+    renderThanks: (req, res) => {
+        return res.render('auth/thanks')
     }
 
 
