@@ -8,11 +8,30 @@
         <% include ../partials/nav %>
 
         <div class="ambu-background" >
-            <h1>THIS IS THE LANDING AFTER YOU REG/LOGIN or UPDATE PROF/PW</h1>
+            <h1>THIS IS THE LANDING AFTER YOU UPDATE PROF/PW</h1>
             <h3>Thank you <%= user.name %>, for registering with our database.</h3>
             <h4>If you're worth a shit, someone will be in contact with you soon.</h4>
             <h4>Get on with your life and wash your hands.</h4>
+
+            <div class="container"> 
+                <div class="row">
+                    <% volunteers.forEach(({image, title, description}) => { %> 
+                        <div class="col-md-4" style="width:20rem;">
+                            <div class="card">
+                                <img src="<%= image %>" class="card-img-top" alt="..." />
+                                <div class="card-body">
+                                    <h5 class="card-title"><%= title %></h5>
+                                    <p class="card-text"><%= description %> </p>
+                                </div>
+                            </div>
+                        </br>
+                        </div>
+                    <% }) %>
+                </div>
+            </div>      
         </div>
+
+
 
         
 

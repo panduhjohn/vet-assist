@@ -8,6 +8,8 @@ const User = require('../models/User');
 require('../../../lib/passport');
 require('dotenv').config();
 
+const volunteers = require('../../../lib/medLoader')
+
 module.exports = {
     renderIndex: (req, res, next) => {
         return res.render('index');
@@ -45,7 +47,7 @@ module.exports = {
                                         message: err
                                     });
                                 } else {
-                                    return res.redirect('/api/users/options');
+                                    return res.redirect('/api/users/profile');
                                     // next();
                                 }
                             });
@@ -63,7 +65,7 @@ module.exports = {
     },
 
     login: passport.authenticate('local-login', {
-        successRedirect: '/api/users/options',
+        successRedirect: '/api/users/profile',
         failureRedirect: '/api/users/login',
         failureFlash: true
     }),
@@ -87,7 +89,7 @@ module.exports = {
         return new Promise((resolve, reject) => {
             User.findById(id)
                 .then(user => {
-                    console.log('hello');
+                    // console.log('hello');
                     if (params.name) user.name = params.name;
                     if (params.email) user.email = params.email;
                     if (params.address) user.address = params.address;
@@ -131,10 +133,7 @@ module.exports = {
                                     })
                                     .catch(err => {
                                         console.log(err);
-                                        throw new Error(
-                                            'Error in passwords',
-                                            err
-                                        );
+                                        throw new Error('Error in passwords', err);
                                     });
                             }
                         })
@@ -148,7 +147,7 @@ module.exports = {
     },
 
     renderOptions: (req, res) => {
-        return res.render('auth/options');
+        return res.render('auth/options', {volunteers});
     }
 
 
