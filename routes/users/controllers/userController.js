@@ -8,7 +8,8 @@ const User = require('../models/User');
 require('../../../lib/passport');
 require('dotenv').config();
 
-const volunteers = require('../../../lib/medLoader')
+const medical = require('../../../lib/medLoader')
+const lawEnforcement = require('../../../lib/policeLoader')
 
 module.exports = {
     renderIndex: (req, res, next) => {
@@ -84,6 +85,14 @@ module.exports = {
         return res.redirect('/api/users/login');
     },
 
+    renderUpdateProfile: (req, res) => {
+        if (req.isAuthenticated()) {
+            return res.render('auth/updateProfile');
+        }
+        return res.redirect('/api/users/login');
+    },
+   
+
     updateProfile: (params, id) => {
         // const {name, email, address} = params //if you want to destructure remove params from the code after the clg(hello)
         return new Promise((resolve, reject) => {
@@ -147,7 +156,7 @@ module.exports = {
     },
 
     renderOptions: (req, res) => {
-        return res.render('auth/options', {volunteers});
+        return res.render('auth/options', {medical, lawEnforcement});
     },
 
     renderThanks: (req, res) => {

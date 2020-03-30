@@ -6,13 +6,12 @@ const IndustrySchema = new Schema({
     name: { type: String, required: true, trim: true },
     email: { type: String, unique: true, lowercase: true, required: true, trim: true},
     password: { type: String, required: true, trim: true },
-    picture: { type: String, default: '', trim: true },
     address: { type: String, default: 'Please update address', trim: true },
     city: { type: String, default: 'Please update city', trim: true },
     state: { type: String, default: 'Please update state', trim: true },
 });
 
-UserSchema.pre('save', function(next) {
+IndustrySchema.pre('save', function(next) {
     const user = this;
     if (!user.isModified('password')) return next();
 

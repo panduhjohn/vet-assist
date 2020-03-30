@@ -28,12 +28,7 @@ router.get('/thanks', userController.renderThanks)
 
 // router.get('/update-profile', userController.updateProfile)
 
-router.get('/update-profile', (req, res) => {
-    if (req.isAuthenticated()) {
-        return res.render('auth/updateProfile');
-    }
-    return res.redirect('/api/users/login');
-});
+router.get('/update-profile', userController.renderUpdateProfile);
 
 router.put('/update-profile', (req, res, next) => {
     userController.updateProfile(req.body, req.user._id)
