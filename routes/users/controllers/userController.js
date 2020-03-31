@@ -8,8 +8,8 @@ const User = require('../models/User');
 require('../../../lib/passport');
 require('dotenv').config();
 
-const medical = require('../../../lib/medLoader')
-const lawEnforcement = require('../../../lib/policeLoader')
+const medical = require('../../../lib/medLoader');
+const lawEnforcement = require('../../../lib/policeLoader');
 
 module.exports = {
     renderIndex: (req, res, next) => {
@@ -79,6 +79,7 @@ module.exports = {
     },
 
     renderProfile: (req, res) => {
+        console.log('renderprofile', req.user);
         if (req.isAuthenticated()) {
             return res.render('auth/profile');
         }
@@ -91,7 +92,6 @@ module.exports = {
         }
         return res.redirect('/api/users/login');
     },
-   
 
     updateProfile: (params, id) => {
         // const {name, email, address} = params //if you want to destructure remove params from the code after the clg(hello)
@@ -104,7 +104,10 @@ module.exports = {
                     if (params.address) user.address = params.address;
                     if (params.city) user.city = params.city;
                     if (params.state) user.state = params.state;
-                    if (params.credentials) user.credentials = params.credentials;
+                    if (params.credentials)
+                        user.credentials = params.credentials;
+                    if (params.organization)
+                        user.organization = params.organization;
                     return user;
                 })
                 .then(user => {
@@ -142,7 +145,10 @@ module.exports = {
                                     })
                                     .catch(err => {
                                         console.log(err);
-                                        throw new Error('Error in passwords', err);
+                                        throw new Error(
+                                            'Error in passwords',
+                                            err
+                                        );
                                     });
                             }
                         })
@@ -156,12 +162,13 @@ module.exports = {
     },
 
     renderOptions: (req, res) => {
-        return res.render('auth/options', {medical, lawEnforcement});
+        if (req.isAuthenticated()) {
+            return res.render('auth/options', { medical, lawEnforcement });
+        }
+        return res.redirect('/api/users/login');
     },
 
     renderThanks: (req, res) => {
-        return res.render('auth/thanks')
+        return res.render('auth/thanks');
     }
-
-
 };

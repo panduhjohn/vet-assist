@@ -3,12 +3,14 @@ const faker = require('faker');
 const passport = require('passport');
 const bcrypt = require('bcryptjs');
 
-const Industry = require('../../industry/models/Industry');
-
+const Industry = require('../models/Industry');
 
 require('../../../lib/passport');
+
 require('dotenv').config();
 
+const medical = require('../../../lib/medLoader');
+const lawEnforcement = require('../../../lib/policeLoader');
 
 module.exports = {
     renderIndex: (req, res, next) => {
@@ -33,7 +35,6 @@ module.exports = {
                     const newIndustry = new Industry();
 
                     newIndustry.name = req.body.name;
-                    newIndustry.picture = faker.image.avatar();
                     newIndustry.email = req.body.email;
                     newIndustry.password = req.body.password;
 
@@ -47,7 +48,11 @@ module.exports = {
                                         message: err
                                     });
                                 } else {
-                                    return res.redirect('/api/industry/profile');
+                                    console.log('End register', req.user);
+                                    res.locals.industry = req.user;
+                                    return res.render('auth/options', {
+                                        industry: req.user
+                                    });
                                     // next();
                                 }
                             });
@@ -64,7 +69,7 @@ module.exports = {
         return res.render('auth/login', { errors: req.flash('errors') });
     },
 
-    login: passport.authenticate('local-login', {
+    login: passport.authenticate('industry-login', {
         successRedirect: '/api/industry/options',
         failureRedirect: '/api/industry/login',
         failureFlash: true
@@ -102,8 +107,6 @@ module.exports = {
                     if (params.address) user.address = params.address;
                     if (params.city) user.city = params.city;
                     if (params.state) user.state = params.state;
-                    if (params.credentials)
-                        user.credentials = params.credentials;
                     return user;
                 })
                 .then(user => {
@@ -117,7 +120,7 @@ module.exports = {
 
     updatePassword: (params, id) => {
         return new Promise((resolve, reject) => {
-            User.findById(id).then(user => {
+            Industry.findById(id).then(user => {
                 if (
                     !params.oldPassword ||
                     !params.newPassword ||
@@ -133,7 +136,6 @@ module.exports = {
                             if (result === false) {
                                 reject('Old password incorrect');
                             } else {
-                                console.log('Did it save?');
                                 user.password = params.newPassword;
                                 user.save()
                                     .then(user => {
@@ -158,10 +160,9 @@ module.exports = {
     },
 
     renderOptions: (req, res) => {
-        return res.render('auth/options', { medical, lawEnforcement });
-    },
-
-    renderThanks: (req, res) => {
-        return res.render('auth/thanks');
+        let industry = req.user;
+        console.log('renderoptions...', req.user);
+        
+        return res.render('auth/options', { industry });
     }
 };

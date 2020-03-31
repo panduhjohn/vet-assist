@@ -9,6 +9,7 @@ const IndustrySchema = new Schema({
     address: { type: String, default: 'Please update address', trim: true },
     city: { type: String, default: 'Please update city', trim: true },
     state: { type: String, default: 'Please update state', trim: true },
+    admin: { type: Boolean, default: true },
 });
 
 IndustrySchema.pre('save', function(next) {
