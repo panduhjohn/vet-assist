@@ -6,7 +6,6 @@ const bcrypt = require('bcryptjs');
 const Industry = require('../models/Industry');
 
 require('../../../lib/passport');
-
 require('dotenv').config();
 
 const medical = require('../../../lib/medLoader');
@@ -16,11 +15,9 @@ module.exports = {
     renderIndex: (req, res, next) => {
         return res.render('index');
     },
-
     renderRegister: (req, res) => {
         return res.render('auth/register', { errors: req.flash('errors') });
     },
-
     register: (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -33,11 +30,10 @@ module.exports = {
                     return res.send('User Exists');
                 } else {
                     const newIndustry = new Industry();
-
                     newIndustry.name = req.body.name;
+                    newIndustry.picture = faker.image.avatar();
                     newIndustry.email = req.body.email;
                     newIndustry.password = req.body.password;
-
                     newIndustry
                         .save()
                         .then(user => {
@@ -48,12 +44,9 @@ module.exports = {
                                         message: err
                                     });
                                 } else {
-                                    console.log('End register', req.user);
-                                    res.locals.industry = req.user;
                                     return res.render('auth/options', {
-                                        industry: req.user
+                                        user: req.user, medical, lawEnforcement
                                     });
-                                    // next();
                                 }
                             });
                         })
@@ -64,38 +57,32 @@ module.exports = {
             })
             .catch(err => console.log(err));
     },
-
     renderLogin: (req, res) => {
         return res.render('auth/login', { errors: req.flash('errors') });
     },
-
     login: passport.authenticate('industry-login', {
         successRedirect: '/api/industry/options',
         failureRedirect: '/api/industry/login',
         failureFlash: true
     }),
-
     renderHomepage: (req, res) => {
         if (req.isAuthenticated()) {
             return res.render('main/homepage');
         }
         return res.redirect('/users/login');
     },
-
     renderProfile: (req, res) => {
         if (req.isAuthenticated()) {
             return res.render('auth/profile');
         }
         return res.redirect('/api/users/login');
     },
-
     renderUpdateProfile: (req, res) => {
         if (req.isAuthenticated()) {
             return res.render('auth/updateProfile');
         }
         return res.redirect('/api/users/login');
     },
-
     updateProfile: (params, id) => {
         // const {name, email, address} = params //if you want to destructure remove params from the code after the clg(hello)
         return new Promise((resolve, reject) => {
@@ -117,7 +104,6 @@ module.exports = {
                 .catch(err => reject(err));
         }).catch(err => reject(err));
     },
-
     updatePassword: (params, id) => {
         return new Promise((resolve, reject) => {
             Industry.findById(id).then(user => {
@@ -158,11 +144,7 @@ module.exports = {
             });
         });
     },
-
     renderOptions: (req, res) => {
-        let industry = req.user;
-        console.log('renderoptions...', req.user);
-        
-        return res.render('auth/options', { industry });
+        return res.render('auth/options', {medical, lawEnforcement});
     }
 };

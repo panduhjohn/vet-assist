@@ -31,7 +31,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="/login">Login</a>
             </li>
-            <% } else if(user) { %>
+            <% } else if(user || industry) { %>
             <li class="nav-item">
                 <a class="nav-link" href="/api/users/profile"
                     >Logged in as:

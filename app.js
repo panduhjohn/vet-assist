@@ -24,7 +24,7 @@ const app = express();
 
 //! Connect DB
 mongoose
-    .connect(process.env.MONGO_URI, {
+    .connect(process.env.MONGODB_URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
         useCreateIndex: true
@@ -54,7 +54,7 @@ app.use(
         saveUninitialized: true,
         secret: process.env.SESSION_SECRET,
         store: new mongoStore({
-            url: process.env.MONGO_URI,
+            url: process.env.MONGODB_URI,
             autoReconnect: true,
             cookie: { maxAge: 60000 }
         })
